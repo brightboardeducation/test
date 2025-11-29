@@ -1,0 +1,30 @@
+{
+    "patterns": [
+        {
+            "pattern": [
+                "hello",
+                "hi",
+                "hey"
+            ],
+            "response": "Hello! How can I assist you today?",
+            "industry": "general"
+        },
+        {
+            "pattern": [
+                "how are you",
+                "how are you doing"
+            ],
+            "response": "I'm functioning well, thank you for asking! How can I help you?",
+            "industry": "general"
+        },
+        {
+            "pattern": [
+                "bye",
+                "goodbye",
+                "see you"
+            ],
+            "response": "Goodbye! Feel free to come back if you have more questions.",
+            "industry": "general"
+        }
+    ]
+}
