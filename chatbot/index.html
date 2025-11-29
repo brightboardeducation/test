@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom ChatBot</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h2>Custom AI Assistant</h2>
+            <div class="training-link">
+                <a href="train.php" target="_blank">Train Bot</a>
+            </div>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot-message">
+                <div class="message-content">
+                    Hello! I'm your custom AI assistant. How can I help you today?
+                </div>
+            </div>
+        </div>
+        
+        <div class="chat-input">
+            <input type="text" id="userInput" placeholder="Type your message here...">
+            <button id="sendButton">Send</button>
+        </div>
+        
+        <div class="chat-status" id="status">
+            Ready
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
