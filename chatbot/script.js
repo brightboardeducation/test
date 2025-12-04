@@ -1,4 +1,3 @@
-//script.js
 class ChatBot {
     constructor() {
         this.chatMessages = document.getElementById('chatMessages');
@@ -6,7 +5,12 @@ class ChatBot {
         this.sendButton = document.getElementById('sendButton');
         this.status = document.getElementById('status');
         
+        // Cache for the knowledge base so we don't fetch it every time
+        this.knowledgeBase = null;
+        
         this.setupEventListeners();
+        // Pre-load the knowledge base
+        this.loadKnowledgeBase();
     }
     
     setupEventListeners() {
@@ -18,6 +22,19 @@ class ChatBot {
         });
     }
     
+    async loadKnowledgeBase() {
+        try {
+            // Fetch the JSON file directly
+            const response = await fetch('data/knowledge.json');
+            if (!response.ok) throw new Error('Failed to load knowledge');
+            this.knowledgeBase = await response.json();
+            this.setStatus('Ready');
+        } catch (error) {
+            console.error('Error loading knowledge base:', error);
+            this.setStatus('Error loading brain');
+        }
+    }
+    
     async sendMessage() {
         const message = this.userInput.value.trim();
         if (!message) return;
@@ -26,32 +43,40 @@ class ChatBot {
         this.userInput.value = '';
         this.setStatus('Thinking...');
         
-        try {
-            const response = await this.getBotResponse(message);
-            this.addMessage(response, 'bot');
-            this.setStatus('Ready');
-        } catch (error) {
-            console.error('Error:', error);
-            this.addMessage('Sorry, I encountered an error. Please try again.', 'bot');
-            this.setStatus('Error occurred');
-        }
+        // Simulate a small delay to feel natural
+        setTimeout(() => {
+            try {
+                const response = this.getBotResponse(message);
+                this.addMessage(response, 'bot');
+                this.setStatus('Ready');
+            } catch (error) {
+                console.error('Error:', error);
+                this.addMessage('Sorry, I encountered an error.', 'bot');
+                this.setStatus('Error occurred');
+            }
+        }, 500); // 500ms delay
     }
     
-    async getBotResponse(message) {
-        const response = await fetch('api.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ message: message })
-        });
+    getBotResponse(message) {
+        if (!this.knowledgeBase) {
+            return "I'm still waking up. Please try again in a second.";
+        }
+
+        const cleanMessage = message.toLowerCase();
+        const patterns = this.knowledgeBase.patterns;
         
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+        // 1. Exact/Keyword Match
+        // We check if the user message contains any of the keywords defined in patterns
+        for (const entry of patterns) {
+            for (const keyword of entry.pattern) {
+                if (cleanMessage.includes(keyword.toLowerCase())) {
+                    return entry.response;
+                }
+            }
         }
         
-        const data = await response.json();
-        return data.response;
+        // 2. Fallback
+        return "I'm still learning. Could you rephrase your question?";
     }
     
     addMessage(content, sender) {
@@ -76,7 +101,7 @@ class ChatBot {
     }
 }
 
-// Initialize the chatbot when the page loads
+// Initialize
 document.addEventListener('DOMContentLoaded', () => {
     new ChatBot();
 });
