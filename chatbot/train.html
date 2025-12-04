@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train ChatBot (Manual)</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Extra styles for the generator */
+        .container { max-width: 800px; margin: 40px auto; background: white; padding: 40px; border-radius: 20px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; }
+        input, textarea, select { width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px; }
+        button { background: #4f46e5; color: white; padding: 15px; border: none; border-radius: 8px; width: 100%; cursor: pointer; font-size: 1.1rem; }
+        button:hover { background: #4338ca; }
+        
+        /* The result box */
+        #resultArea { margin-top: 30px; display: none; background: #f8fafc; padding: 20px; border: 1px dashed #4f46e5; border-radius: 10px; }
+        code { background: #eee; padding: 2px 5px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Train Your Bot</h1>
+        <p style="margin-bottom: 20px; color: #666;">
+            Since this is hosted on GitHub Pages, we cannot save directly to the file. 
+            Fill out this form, then <strong>copy the generated code</strong> and paste it into your <code>data/knowledge.json</code> file.
+        </p>
+
+        <div class="form-group">
+            <label>Patterns (comma separated)</label>
+            <input type="text" id="patterns" placeholder="e.g. price, cost, how much">
+        </div>
+        
+        <div class="form-group">
+            <label>Bot Response</label>
+            <textarea id="response" rows="4" placeholder="e.g. It costs $10."></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label>Industry</label>
+            <select id="industry">
+                <option value="general">General</option>
+                <option value="tech">Tech</option>
+                <option value="finance">Finance</option>
+            </select>
+        </div>
+
+        <button onclick="generateCode()">Generate Code</button>
+
+        <div id="resultArea">
+            <h3>Copy this JSON:</h3>
+            <textarea id="jsonOutput" style="height: 150px; font-family: monospace;"></textarea>
+            <p style="font-size: 0.9rem; margin-top: 10px; color: #666;">
+                Open your <code>knowledge.json</code> file and paste this inside the "patterns" list (add a comma after the previous item!).
+            </p>
+        </div>
+        
+        <div style="margin-top: 20px; text-align: center;">
+            <a href="index.html" style="color: #4f46e5; text-decoration: none;">&larr; Back to Chat</a>
+        </div>
+    </div>
+
+    <script>
+        function generateCode() {
+            const patternsStr = document.getElementById('patterns').value;
+            const response = document.getElementById('response').value;
+            const industry = document.getElementById('industry').value;
+
+            // Convert string "hi, hello" into array ["hi", "hello"]
+            const patternArray = patternsStr.split(',').map(s => s.trim().toLowerCase());
+
+            const newObject = {
+                pattern: patternArray,
+                response: response,
+                industry: industry
+            };
+
+            const jsonString = JSON.stringify(newObject, null, 4);
+            
+            document.getElementById('resultArea').style.display = 'block';
+            document.getElementById('jsonOutput').value = jsonString + ",";
+        }
+    </script>
+</body>
+</html>
